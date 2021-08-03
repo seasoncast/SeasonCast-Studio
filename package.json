@@ -1,21 +1,18 @@
 {
-  "name": "electron-quick-start",
+  "name": "seasoncast-studio",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "A broadcasting tool",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/seasoncast/SeasonCast-Studio",
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "SeasonCast",
+    "SeasonCast Studio"
   ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "author": "SeasonCast Inc,",
+  "license": "MIT",
   "devDependencies": {
     "electron": "^13.1.7"
   }
