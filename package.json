@@ -57,11 +57,14 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "bootstrap": "^5.0.0-beta3",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
-    "vuex-electron": "^1.0.0"
+    "vuex-electron": "^1.0.0",
+    "oseg-engine": "file:/Users/maxwellsmith/Desktop/seasoncast/oseg-lib"
+
   },
   "devDependencies": {
     "ajv": "^6.5.0",
