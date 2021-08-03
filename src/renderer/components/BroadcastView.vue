@@ -59,10 +59,11 @@
             
 </div>   
 </div>
-
+</div>
 </template>
 
 <script>
+import OSEG from 'oseg'
 export default {
   name: 'BroadcastView',
   data () {
@@ -71,18 +72,10 @@ export default {
       oseg: undefined
     }
   },
-  methods: {
-    pushScene (scene) {
-
-    },
-    setupOSEG () {
-      //this.oseg = new OSEG();
-
-  }
-
-},
   created () {
-    this.setupOSEG();
+    console.log('BroadcastView created')
+    this.oseg = OSEG(1920, 1080)
+    console.log(this.oseg)
   }
 }
 </script>
