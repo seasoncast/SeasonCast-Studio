@@ -1,4 +1,26 @@
-# SeasonCast Studio: Open Source Broadcasing Software
-SeasonCast Studio is an open-source desktop broadcast tool to create professional broadcast for your events
+# SeasonCast Studio
 
-Instructions are coming soon on how to install, use, and develop.
+> A professional-grade broadcasting software
+
+#### Build Setup
+
+``` bash
+# install dependencies
+npm install
+
+# serve with hot reload at localhost:9080
+npm run dev
+
+# build electron application for production
+npm run build
+
+# run unit & end-to-end tests
+npm test
+
+
+# lint all JS/Vue component files in `src/`
+npm run lint
+
+```
+
+
