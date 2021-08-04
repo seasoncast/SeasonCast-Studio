@@ -2,7 +2,8 @@
 <template>
 <div class="BroadcastPage">
       <!-- This is a broadcaster view for the broadcasting tool  -->
-   <canvas ref="canvasOutput" width="600" height="400" style="border: 1px solid #ccc;"></canvas>
+    
+   <canvas ref="canvasOutput"  style="border: 1px solid #ccc;"></canvas>
                                     
 </div>
 </template>
@@ -14,36 +15,38 @@ export default {
   data () {
     return {
       scenes: [],
-      oseg: new OSEG(1920, 1080, this.$refs.canvasOutput)
+      oseg: undefined,
     }
   },
-  created () {
+  mounted () {
     console.log('BroadcastView created')
-     const  exampleScene =  {
-        id: "scene1",
-        name: "Scene 1",
-        components: [
-          {
-            x: 0,
-            y: 0,
-            width: 20,
-            height: 20,
-            type: componentType.text,
-            text: "Hello World {gamebee.oreos}",
-            options: {
+    const exampleScene = {
+      id: 'scene1',
+      name: 'Scene 1',
+      components: [
+        {
+          x: 0,
+          y: 0,
+          width: 20,
+          height: 20,
+          type: 1,
+          text: 'Hello World {gamebee.oreos}',
+          options: {
             fontFamily: 'Arial',
             fontSize: 80,
             fontStyle: 'italic',
             fontWeight: 'bold',
             fill: ['#ffffff', '#00ff99'], // gradient
-            stroke: '#4a1850',
-       
-            }
-          }
-        ]
-      }
+            stroke: '#4a1850'
 
-    this.oseg.addSceneToCurrent(exampleScene, 5)
+          }
+        }
+      ]
+    }
+    this.oseg = new OSEG(1920, 1080, this.$refs.canvasOutput)
+    this.oseg.addSceneToCurrent(exampleScene)
+    this.oseg.broadcastTimerStart()
+    
   }
 }
 </script>
