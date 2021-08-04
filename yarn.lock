@@ -6967,10 +6967,10 @@ karma-coverage@^1.1.2:
     minimatch "^3.0.0"
     source-map "^0.5.1"
 
-karma-electron@^6.0.0:
-  version "6.3.4"
-  resolved "https://registry.yarnpkg.com/karma-electron/-/karma-electron-6.3.4.tgz#4de03579f45c18fa1ffb8e281155282535f95766"
-  integrity sha512-JqoHTWUs5ZcTqB46uGtZ/L1CadL+J3TGGpjH02+G4s/6boPLhrH4OtC72brfV5h8GnnTLE8/H9NEfk4l6hVClA==
+karma-electron@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/karma-electron/-/karma-electron-7.0.0.tgz#31d6ccd1406b893cf0010d8e7543ab259cf74be3"
+  integrity sha512-AMwpMCWbYVhqaw9gzUIzmsCftB1ttiNJE4lm+BKPgxmxszdNfIG3gNpxH2rUxwP4aKWucFPo1vAJ4nMQfNBZ3Q==
   dependencies:
     async "~3.0.1"
     combine-source-map "~0.8.0"
