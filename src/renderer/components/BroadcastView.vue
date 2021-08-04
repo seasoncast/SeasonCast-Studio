@@ -2,63 +2,8 @@
 <template>
 <div class="BroadcastPage">
       <!-- This is a broadcaster view for the broadcasting tool  -->
-    <!-- Nav bar with SeasonCast Studio logo svg and the project name in the left and on the right side have icons that are to: User icon, Settingsicon, Help icon, and Logout icon. -->
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-
-          <a class="navbar-brand" href="#">SeasonCast Studio</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">Help</a></li>
-            <li><a href="#">Logout</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-    <!-- The main content of the page is the broadcasting software, it will contain a sidebar with a list of Scenes (each scene has a image, title, and icons toadd, edit, and remove the scene). and the bottom half of the side bar will list the propeties of the selected scene. The second section will have a preview window the bottom half having a Storeline (a storeline has a timeline track that can have Scenes placed on to be added to the preview video. The third section will have Output window that shows a modifed version of preview. Below the output window will be the audio mixing section )  -->
-    <div class="container">
-      <div class="row">
-        <div class="col-md-3">
-          <div class="sidebar">
-              <h4>Available Scenes</h4>
-              <div>
-                <ul class="list-group">
-                  <li class="list-group-item" v-for="scene in scenes" v-bind:key="scene.id">
-                    <image class="img-responsive" :src="scene.image" width="100%"></image>
-                    <h4 class="list-group-item-heading">{{scene.title}}</h4>
-                    <!-- Icons to push to preview, edit, and remove the scene -->
-                    <a class="btn btn-default" href="#" role="button" @click="pushScene(scene)">
-                      <i class="fa fa-plus"></i>
-                    </a>
-                    <a class="btn btn-default" href="#" role="button" @click="editScene(scene)">
-                      <i class="fa fa-pencil"></i>
-                    </a>
-                    <a class="btn btn-default" href="#" role="button" @click="removeScene(scene)">
-                      <i class="fa fa-trash"></i>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-
-          </div>
-        </div>
-
-                        
-                    
-                                            
-            
-</div>   
-</div>
+   <canvas ref="canvasOutput" width="600" height="400" style="border: 1px solid #ccc;"></canvas>
+                                    
 </div>
 </template>
 
@@ -69,13 +14,36 @@ export default {
   data () {
     return {
       scenes: [],
-      oseg: undefined
+      oseg: new OSEG(1920, 1080, this.$refs.canvasOutput)
     }
   },
   created () {
     console.log('BroadcastView created')
-    this.oseg = OSEG(1920, 1080)
-    console.log(this.oseg)
+     const  exampleScene =  {
+        id: "scene1",
+        name: "Scene 1",
+        components: [
+          {
+            x: 0,
+            y: 0,
+            width: 20,
+            height: 20,
+            type: componentType.text,
+            text: "Hello World {gamebee.oreos}",
+            options: {
+            fontFamily: 'Arial',
+            fontSize: 80,
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+            fill: ['#ffffff', '#00ff99'], // gradient
+            stroke: '#4a1850',
+       
+            }
+          }
+        ]
+      }
+
+    this.oseg.addSceneToCurrent(exampleScene, 5)
   }
 }
 </script>

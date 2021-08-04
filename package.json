@@ -59,7 +59,7 @@
     "@popperjs/core": "^2.9.2",
     "axios": "^0.18.0",
     "bootstrap": "^5.0.0-beta3",
-    "oseg": "/Users/maxwellsmith/Desktop/seasoncast/oseg-lib",
+    "oseg": "^0.0.4",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.1",
