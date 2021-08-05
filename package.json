@@ -57,7 +57,7 @@
     "@popperjs/core": "^2.9.2",
     "axios": "^0.18.0",
     "bootstrap": "^5.0.0-beta3",
-    "oseg": "^0.0.7",
+    "oseg": "^0.0.10",
     "vue": "^2.5.16",
     "vue-devtools": "^5.1.4",
     "vue-electron": "^1.0.6",

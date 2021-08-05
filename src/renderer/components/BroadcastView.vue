@@ -3,30 +3,38 @@
 <div class="BroadcastPage">
       <!-- This is a broadcaster view. there is three columns. the first one is the sidebar -->
     <div  class="row">
-        <div class="col-md-3">
+        <div class="col-3">
         <div class="sidebar-nav panel">
           <h3 class="header-text">Scenes</h3>
           <ul class="nav nav-sidebar">
             <li v-for="scene in scenes" v-bind:class="{'active': scene.id == false}">
               <a v-on:click="selectScene(scene.id)">{{scene.name}}</a>
             </li>
+            <!-- Temp to show rendering on screen : source: https://www.videvo.net/video/flying-through-palm-trees-along-beach/6471/ -->
+            <video loop autoplay muted src="../../../static/example_video_test.mp4" style="display:none;" ref="exampleVideo"></video>
           </ul>
         </div>
         </div>
-        <div class="col-md-9">
+        <div class="col-6">
           <div class="panel panel-default">
             <h3 class="header-text">Feed Output</h3>
    <canvas ref="canvasOutput" class="canvasOutput"></canvas>
           </div>
         </div>
-    </div>
-    <div  class="row">
-         <div class="col-md-3">
+              <div class="col-md-3">
           <div class="panel panel-default">
-            <h3 class="header-text">Scoreboard</h3>
+            <h3 class="header-text">Control Center</h3>
           </div>
         </div>
-        <div class="col-md-6">
+    </div>
+    <div v-if="oseg" class="row">
+         <div class="col-3">
+          <div class="panel panel-default">
+            <h3 class="header-text">Data Source / Scoreboard</h3>
+    
+          </div>
+        </div>
+        <div class="col-6">
           <div class="panel panel-default">
             <h3 class="header-text">Storyline</h3>
             <div class="timeline">
@@ -70,19 +78,44 @@ export default {
       id: 'scene1',
       name: 'Scene 1',
       components: [
+          {
+            x: 0,
+            y: 0,
+            width: 100,
+            height: 100,
+            type: 3,
+          
+                video: this.$refs.exampleVideo,
+            
+          },
         {
           x: 0,
           y: 0,
-          width: 20,
+          width: 90,
           height: 20,
           type: 1,
-          text: 'Hello World {gamebee.oreos}',
+          text: 'Welcome to SeasonCast Studio',
           options: {
             fontFamily: 'Arial',
             fontSize: 80,
             fontStyle: 'italic',
             fontWeight: 'bold',
-            fill: ['#ffffff', '#00ff99'], // gradient
+            fill: ['#4287f5', '#b042f5'], // gradient
+            stroke: '#4a1850'
+
+          }
+        },
+                {
+          x: 5,
+          y: 90,
+          width: 50,
+          height: 10,
+          type: 1,
+          text: 'Current Time: {gamebee.oreos}',
+          options: {
+            fontFamily: 'Arial',
+            fontSize: 60,
+            fontWeight: 'bold',
             stroke: '#4a1850'
 
           }
@@ -92,7 +125,24 @@ export default {
     
     this.oseg.addSceneToCurrent(exampleScene)
     this.oseg.broadcastTimerStart()
-    
+    setInterval(() => {
+      var now = new Date();
+var pretty = [
+  now.getFullYear(),
+  '-',
+  now.getMonth() + 1,
+  '-',
+  now.getDate(),
+  ' ',
+  now.getHours(),
+  ':',
+  now.getMinutes(),
+  ':',
+  now.getSeconds()
+].join('');
+  this.oseg.dataMap["gamebee.oreos"] = pretty
+  this.oseg.updateDynamicTextInScenes()
+  }, 1000).bind(this)
   }
 }
 </script>
