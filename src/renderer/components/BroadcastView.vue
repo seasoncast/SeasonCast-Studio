@@ -3,13 +3,53 @@
 <div class="BroadcastPage">
       <!-- This is a broadcaster view. there is three columns. the first one is the sidebar -->
     <div  class="row">
+                    <div class="col-md-3">
+          <div class="panel panel-default">
+            <h3 class="header-text">Input Feeds</h3>
+            <div class="panel-body">
+              <button class="btn btn-light">+ Add Camera/Video</button>
+            </div>
+            <div class="feedDisplay">
+              <p>Camera 1</p>
+            </div>
+
+          </div>
+        </div>
         <div class="col-3">
         <div class="sidebar-nav panel">
           <h3 class="header-text">Scenes</h3>
           <ul class="nav nav-sidebar">
-            <li v-for="scene in scenes" v-bind:class="{'active': scene.id == false}">
+            <li v-for="scene in oseg.scenes" v-bind:class="{'active': scene.id == false}">
               <a v-on:click="selectScene(scene.id)">{{scene.name}}</a>
+                   <!-- Dropdown to switch camera feed -->
+            <br style="clear:both" />
+              <span class="fa fa-camera"></span> Camera 1
+            <li class="dropdown"> &nbsp;
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li v-for="cam in cameras">
+                  <a v-on:click="selectCamera(cam.id)">{{cam.name}}</a>
+                </li>
+              </ul>
             </li>
+            <!-- Dropdown to switch graphic -->
+              <span class="fa fa-image"></span> Graphic
+
+            <li class="dropdown"> &nbsp;
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li v-for="graphic in graphics">
+                  <a v-on:click="selectGraphic(graphic.id)">{{graphic.name}}</a>
+                </li>
+              </ul>
+            </li>
+            </li>
+
             <!-- Temp to show rendering on screen : source: https://www.videvo.net/video/flying-through-palm-trees-along-beach/6471/ -->
             <video loop autoplay muted src="../../../static/example_video_test.mp4" style="display:none;" ref="exampleVideo"></video>
           </ul>
@@ -21,11 +61,7 @@
    <canvas ref="canvasOutput" class="canvasOutput"></canvas>
           </div>
         </div>
-              <div class="col-md-3">
-          <div class="panel panel-default">
-            <h3 class="header-text">Control Center</h3>
-          </div>
-        </div>
+
     </div>
     <div v-if="oseg" class="row">
          <div class="col-3">
@@ -62,7 +98,9 @@ export default {
   data () {
     return {
       scenes: [],
-      oseg: undefined
+      cameras: [],
+      graphics: [],
+      oseg: new OSEG(1920, 1080)
     }
   },
   destroyed () {
@@ -70,8 +108,7 @@ export default {
   },
   mounted () {
     console.log('BroadcastView created')
-
-    this.oseg = new OSEG(1920, 1080, this.$refs.canvasOutput)
+    this.oseg.setupCanvas(this.$refs.canvasOutput)
     const exampleScene = {
       id: 'scene1',
       name: 'Scene 1',
@@ -120,7 +157,7 @@ export default {
         }
       ]
     }
-
+    this.oseg.importScene(exampleScene)
     this.oseg.addSceneToCurrent(exampleScene)
     this.oseg.broadcastTimerStart()
     setInterval(() => {

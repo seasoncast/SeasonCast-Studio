@@ -8565,10 +8565,10 @@ os-tmpdir@^1.0.1, os-tmpdir@~1.0.2:
   resolved "https://registry.yarnpkg.com/os-tmpdir/-/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
   integrity sha1-u+Z0BseaqFxc/sdm/lc0VV36EnQ=
 
-oseg@^0.0.10:
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/oseg/-/oseg-0.0.10.tgz#4a480e147d7a418a20bfbbfbe4b4640c43623a7b"
-  integrity sha512-rQo2/qRXbSwHllpgoEDfXqYxsLNYkn/epmD8WhqLX/IM3at6EON3k8igKzICSd8gIhhmDOR9etCRbkyLWhlADQ==
+oseg@^0.0.11:
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/oseg/-/oseg-0.0.11.tgz#0d74977a6d2f139228605c9f19c22bae530c6cc2"
+  integrity sha512-A3We2kuvHeQ6TrPXDXMze8n+e593J/Dd0Ae0B1fFxW1ZJwyja4egrrn/LvviMvCxZ6P4LNEgECOOg83dFXfVKg==
   dependencies:
     pixi-ease "^3.0.7"
     pixi.js "^6.0.4"
