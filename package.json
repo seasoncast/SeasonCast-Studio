@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.9.2",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "bootstrap": "^5.0.0-beta3",
     "oseg": "^0.0.11",
     "vue": "^2.6.14",
