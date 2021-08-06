@@ -6,7 +6,7 @@ const path = require('path')
 const { dependencies } = require('../package.json')
 const webpack = require('webpack')
 
-const MinifyPlugin = require("babel-minify-webpack-plugin")
+const TerserPlugin = require('terser-webpack-plugin')
 
 let mainConfig = {
   entry: {
@@ -61,7 +61,9 @@ let mainConfig = {
  * Adjust mainConfig for development settings
  */
 if (process.env.NODE_ENV !== 'production') {
+  
   mainConfig.plugins.push(
+    new TerserPlugin(),
     new webpack.DefinePlugin({
       '__static': `"${path.join(__dirname, '../static').replace(/\\/g, '\\\\')}"`
     })
@@ -73,7 +75,7 @@ if (process.env.NODE_ENV !== 'production') {
  */
 if (process.env.NODE_ENV === 'production') {
   mainConfig.plugins.push(
-    new MinifyPlugin(),
+    new TerserPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': '"production"'
     })

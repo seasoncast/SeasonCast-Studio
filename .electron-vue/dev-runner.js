@@ -49,10 +49,10 @@ function startRenderer () {
     })
 
     compiler.hooks.compilation.tap('compilation', compilation => {
-      compilation.hooks.htmlWebpackPluginAfterEmit.tapAsync('html-webpack-plugin-after-emit', (data, cb) => {
-        hotMiddleware.publish({ action: 'reload' })
-        cb()
-      })
+      // compilation.hooks.htmlWebpackPluginAfterEmit.tapAsync('html-webpack-plugin-after-emit', (data, cb) => {
+      //   //hotMiddleware.publish({ action: 'reload' })
+      //   cb()
+      // })
     })
 
     compiler.hooks.done.tap('done', stats => {
@@ -65,6 +65,11 @@ function startRenderer () {
         contentBase: path.join(__dirname, '../'),
         quiet: true,
         hot: true,
+        compress: true,
+        liveReload: true,
+        watchOptions: {
+          ignored: /node_modules/
+        },
         before (app, ctx) {
           // app.use(hotMiddleware)
           ctx.middleware.waitUntilValid(() => {
@@ -84,11 +89,11 @@ function startMain () {
     mainConfig.mode = 'development'
     const compiler = webpack(mainConfig)
 
-    compiler.hooks.watchRun.tapAsync('watch-run', (compilation, done) => {
-      logStats('Main', chalk.white.bold('compiling...'))
-      hotMiddleware.publish({ action: 'compiling' })
-      done()
-    })
+    // compiler.hooks.watchRun.tapAsync('watch-run', (compilation, done) => {
+    //   logStats('Main', chalk.white.bold('compiling...'))
+    //   hotMiddleware.publish({ action: 'compiling' })
+    //   done()
+    // })
 
     compiler.watch({}, (err, stats) => {
       if (err) {
