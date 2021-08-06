@@ -24,8 +24,13 @@ function createWindow () {
     height: 1080,
     useContentSize: true,
     width: 1920,
-    backgroundColor: '#303030'
-
+    backgroundColor: '#303030',
+    webPreferences: {
+      contextIsolation: false,
+      nodeIntegration: true,
+      nodeIntegrationInWorker: true,
+      enableRemoteModule: true
+    }
   })
 
   mainWindow.loadURL(winURL)

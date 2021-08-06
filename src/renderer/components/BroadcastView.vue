@@ -31,7 +31,7 @@
          <div class="col-3">
           <div class="panel panel-default">
             <h3 class="header-text">Data Source / Scoreboard</h3>
-    
+
           </div>
         </div>
         <div class="col-6">
@@ -39,7 +39,7 @@
             <h3 class="header-text">Storyline</h3>
             <div class="timeline">
               <div class="timeline-row">
-              
+
               </div>
             </div>
           </div>
@@ -54,9 +54,7 @@
 </div>
 </template>
 
-<script>
-
-
+<script lang="ts">
 
 import OSEG from 'oseg'
 export default {
@@ -64,7 +62,7 @@ export default {
   data () {
     return {
       scenes: [],
-      oseg: undefined,
+      oseg: undefined
     }
   },
   destroyed () {
@@ -72,22 +70,22 @@ export default {
   },
   mounted () {
     console.log('BroadcastView created')
-   
-    this.oseg = new OSEG(1920, 1080, this.$refs.canvasOutput) 
-     const exampleScene = {
+
+    this.oseg = new OSEG(1920, 1080, this.$refs.canvasOutput)
+    const exampleScene = {
       id: 'scene1',
       name: 'Scene 1',
       components: [
-          {
-            x: 0,
-            y: 0,
-            width: 100,
-            height: 100,
-            type: 3,
-          
-                video: this.$refs.exampleVideo,
-            
-          },
+        {
+          x: 0,
+          y: 0,
+          width: 100,
+          height: 100,
+          type: 3,
+
+          video: this.$refs.exampleVideo
+
+        },
         {
           x: 0,
           y: 0,
@@ -105,7 +103,7 @@ export default {
 
           }
         },
-                {
+        {
           x: 5,
           y: 90,
           width: 50,
@@ -122,27 +120,27 @@ export default {
         }
       ]
     }
-    
+
     this.oseg.addSceneToCurrent(exampleScene)
     this.oseg.broadcastTimerStart()
     setInterval(() => {
-      var now = new Date();
-var pretty = [
-  now.getFullYear(),
-  '-',
-  now.getMonth() + 1,
-  '-',
-  now.getDate(),
-  ' ',
-  now.getHours(),
-  ':',
-  now.getMinutes(),
-  ':',
-  now.getSeconds()
-].join('');
-  this.oseg.dataMap["gamebee.oreos"] = pretty
-  this.oseg.updateDynamicTextInScenes()
-  }, 1000).bind(this)
+      const now = new Date()
+      const pretty = [
+        now.getFullYear(),
+        '-',
+        now.getMonth() + 1,
+        '-',
+        now.getDate(),
+        ' ',
+        now.getHours(),
+        ':',
+        now.getMinutes(),
+        ':',
+        now.getSeconds()
+      ].join('')
+      this.oseg.dataMap['gamebee.oreos'] = pretty
+      this.oseg.updateDynamicTextInScenes()
+    }, 1000).bind(this)
   }
 }
 </script>
@@ -171,6 +169,5 @@ var pretty = [
   color: rgb(230, 230, 230);
   width:100%;
 }
-
 
 </style>
