@@ -1,15 +1,15 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <BroadcastView />
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import HelloWorld from './components/HelloWorld.vue';
-
+import BroadcastView from './components/BroadcastView.vue';
+import 'bootstrap'
+import 'bootstrap/dist/css/bootstrap.min.css'
 @Options({
   components: {
-    HelloWorld,
+    BroadcastView,
   },
 })
 export default class App extends Vue {}
@@ -22,6 +22,6 @@ export default class App extends Vue {}
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  height: 100%;
 }
 </style>
