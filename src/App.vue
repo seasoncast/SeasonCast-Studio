@@ -5,7 +5,8 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import BroadcastView from './components/BroadcastView.vue';
-
+import 'bootstrap'
+import 'bootstrap/dist/css/bootstrap.min.css'
 @Options({
   components: {
     BroadcastView,
@@ -21,6 +22,6 @@ export default class App extends Vue {}
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  height: 100%;
 }
 </style>

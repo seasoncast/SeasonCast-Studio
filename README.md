@@ -1,20 +1,20 @@
 # Seasoncast Studio
 > A professional-grade broadcasting software
 
-The goal of this project is to create a simple, easy to use, and highly customizable open-source broadcast software.
+The goal of this project is to create a simple, easy to use, and highly customizable open-source broadcast software. This is open-source software and is free for end-users.
 
 Some of the features that are planned to be implemented:
-- [x] Basic broadcasting
-- [x] Multiple Camera Switching
-- [x] Multiple Audio Input Switching
-- [x] Data Loading from multiple sources in real-time
-- [x] Mutiple computers can be used to work on the same broadcast
-- [x] Remote camera from mobile devices
-- [x] Easy to create custom graphics
-- [x] Easy to play commercials
-- [x] Use SeasonCast specific resources (GameBee, Event Creation)
-- [x] Easy to use
-- [x] Easy to customize
+- [ ] Basic broadcasting
+- [ ] Multiple Camera Switching
+- [ ] Multiple Audio Input Switching
+- [ ] Data Loading from multiple sources in real-time
+- [ ] Mutiple computers can be used to work on the same broadcast
+- [ ] Remote camera from mobile devices
+- [ ] Easy to create custom graphics
+- [ ] Easy to play commercials
+- [ ] Use SeasonCast specific resources (GameBee, Event Creation)
+- [ ] Easy to use
+- [ ] Easy to customize
 
 
 ## End-user Installation
@@ -23,7 +23,7 @@ Coming Soon...
 
 ## Development 
 
-Contributing to this project is welcome and encouraged! 
+Contributing to this project is welcome and encouraged! Checkout 'Development Milestones' section for a list of current tasks.
 
 
 [Maxwell Smith](https://github.com/themaxsmith) is the lead developer of this project. Contact him by opening an issue or PR.
@@ -75,4 +75,27 @@ yarn build
 yarn lint
 ```
 
+## Development Milestones
 
+### [&#10007;] Basic broadcasting
+- [x] Add user webcam to the UI
+- [ ] User webcam input to the oseg canvas
+- [ ] oseg canvas output to local backend via WebRTC using this [example](https://github.com/node-webrtc/node-webrtc-examples)
+- [ ] local backend output to RTMP output via FFMPEG using this [example](https://github.com/node-webrtc/node-webrtc-examples/tree/master/examples/record-audio-video-stream)
+
+### [&#10007;] Basic graphic changing
+- [ ] List scenes in the UI
+- [ ] Select and de-select a scene
+
+### [&#10007;] Basic broadcasting - Part 2
+- [ ] User microphone input to a audio mixer
+- [ ] Audio mixer output to local backend
+
+### [&#10007;] Basic storyline
+- [ ] Show a story in the UI
+- [ ] a timline of the story and when it ends 
+More goals to be added...
+
+### [&#10007;] Basic SeasonCast Integration 
+- [ ] User can optionally auth user with SeasonCast using API V2 : docs [here](https://documenter.getpostman.com/view/7815111/SztK35Gr)
+- [ ] Pass user auth token to oseg rendering engine
