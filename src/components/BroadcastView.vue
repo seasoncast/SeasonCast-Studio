@@ -11,12 +11,11 @@
             </div>
             <div class="feedDisplay" v-for="feed in cameras" v-bind:class="{'selected': feed.selected}" v-bind:key="feed.id">
               <div class="feedDisplay-inner">
-               <video v-bind:ref="feed.id" autoplay></video>
-               <!-- Start video preview -->
-               <button @click="startPreview(feed)" class="btn btn-light">Start Preview</button>
+               <video style="width:100%" v-bind:ref="feed.id" autoplay ></video>
+               <span>{{feed.name}}</span>
               </div>
             </div>
-            {{ cameras}}
+          
 
           </div>
         </div>
@@ -108,11 +107,20 @@ import { Scene } from 'oseg/build/types/structs/storyline'
 
 export default class BroadcastView extends Vue {
     scenes = [] as any[]
-    cameras = [] as {id: string, name: string}[]
+    cameras = [] as {id: string, name: string, feed?: MediaStream}[]
     graphics = [] as any[]
-    oseg = new OSEG(1920, 1080)
+    oseg = new OSEG(1920, 1080, "dev-studio")
 
-
+ updated() {
+  console.log("re-render")
+  this.cameras.forEach(cam => {
+      if (this.$refs[cam.id] && cam.feed) {
+           const video = this.$refs[cam.id] as HTMLVideoElement
+          video.srcObject = cam.feed
+          video.play()
+      }
+  })
+ }
   mounted () {
       if (this.$refs.canvasOutput) {
     console.log('BroadcastView created')
@@ -206,32 +214,19 @@ export default class BroadcastView extends Vue {
       if (userChoice.value) {
         this.cameras.push({
           id: userChoice.value,
-          name: cameraMap[userChoice.value]
-        })
-      }
-    }
-
-    // Add a getusermedia camera to the cameras array. The camera object must have an id, a name, and a video element.
-    async startPreview (camera: any) {
-      console.error('d')
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          audio: false,
+          name: cameraMap[userChoice.value],
+          feed: await navigator.mediaDevices.getUserMedia({
+          audio: true,
           video: {
-
+            deviceId: userChoice.value,
             width: 1920,
             height: 1080
           }
         })
-        if (this.$refs[camera.id]) {
-          const video = this.$refs[camera.id] as HTMLVideoElement
-          video.srcObject = stream
-          video.play()
-        }
-      } catch (e) {
-        console.log(e)
+        })
       }
     }
+
   
 
 }

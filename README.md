@@ -34,7 +34,7 @@ The layout of this project is as follows:
 - UI/Frontend: [Vue 3](https://vuejs.org/) - TypeScript
 - Rendering Engine: [OSEG](https://www.npmjs.com/package/oseg) - In-House & located as oseg in NPM
 - Desktop Framework: [Electron](https://www.electronjs.org/) - Using vue-cli-plugin-electron-builder
-- Local Backend: [Node.js](https://nodejs.org/)] - Running locally in Electron
+- Local Backend: [Node.js](https://nodejs.org/) - Running locally in Electron
 
 The flow of the project is as follows:
 
