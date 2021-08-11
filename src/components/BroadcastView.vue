@@ -2,20 +2,21 @@
 <template>
 <div class="BroadcastPage">
       <!-- This is a broadcaster view. there is three columns. the first one is the sidebar -->
-    <div  class="row">
-                    <div class="col-md-3">
+    <div  class="pageTop row">
+                    <div class="col-md-4">
           <div class="panel panel-default">
             <h3 class="header-text">Input Feeds</h3>
             <div class="panel-body">
-              <button @click="selectCamera" class="btn btn-light">+ Add Camera/Video</button>
+              <button @click="selectCamera" class="btn btn-light">+ Add Camera/Video</button><br />
             </div>
+            <div class="feedContainer">
             <div class="feedDisplay" v-for="feed in cameras" v-bind:class="{'selected': feed.selected}" v-bind:key="feed.id">
               <div class="feedDisplay-inner">
-               <video style="width:100%" v-bind:ref="feed.id" autoplay ></video>
-               <span>{{feed.name}}</span>
+               <video style="width:100%" v-bind:ref="feed.id" autoplay controls :src="feed.url"></video>
+               <span>{{feed.name}} <button class="pushFeed" @click="pushFeed(feed)">+</button></span>
               </div>
             </div>
-          
+          </div>
 
           </div>
         </div>
@@ -62,7 +63,7 @@
           </ul>
         </div>
         </div>
-        <div class="col-6">
+        <div class="col-5">
           <div class="panel panel-default">
             <h3 class="header-text">Feed Output</h3>
    <canvas ref="canvasOutput" class="canvasOutput"></canvas>
@@ -70,7 +71,7 @@
         </div>
 
     </div>
-    <div v-if="oseg" class="row">
+    <div v-if="oseg" class="pageBottom row">
          <div class="col-3">
           <div class="panel panel-default">
             <h3 class="header-text">Data Source / Scoreboard</h3>
@@ -107,7 +108,7 @@ import { Scene } from 'oseg/build/types/structs/storyline'
 
 export default class BroadcastView extends Vue {
     scenes = [] as any[]
-    cameras = [] as {id: string, name: string, feed?: MediaStream}[]
+    cameras = [{id:'example', name: "Example", url: "https://www.w3schools.com/html/mov_bbb.mp4", type:"video" }] as {id: string, name: string, feed?: MediaStream, url?: string, type: string}[]
     graphics = [] as any[]
     oseg = new OSEG(1920, 1080, "dev-studio")
 
@@ -116,8 +117,10 @@ export default class BroadcastView extends Vue {
   this.cameras.forEach(cam => {
       if (this.$refs[cam.id] && cam.feed) {
            const video = this.$refs[cam.id] as HTMLVideoElement
+           if (cam.type == "camera-local") {
           video.srcObject = cam.feed
           video.play()
+           } 
       }
   })
  }
@@ -198,6 +201,8 @@ export default class BroadcastView extends Vue {
       }
   }
 
+  
+
     // in a Swal, we list the the cameras from getuserMediaDevices() and let them select a device
     async selectCamera () {
       const cameras = navigator.mediaDevices.enumerateDevices()
@@ -213,6 +218,7 @@ export default class BroadcastView extends Vue {
       })
       if (userChoice.value) {
         this.cameras.push({
+          type: "camera-local",
           id: userChoice.value,
           name: cameraMap[userChoice.value],
           feed: await navigator.mediaDevices.getUserMedia({
@@ -255,6 +261,39 @@ export default class BroadcastView extends Vue {
   text-align: center;
   color: rgb(230, 230, 230);
   width:100%;
+}
+
+/* feedContainer is a flexbox that stacks twocolumns of feedDisplays */
+.feedContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+   flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+ 
+}
+
+.feedDisplay {
+  display: flex;
+   padding: 10px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 100%;
+}
+/* pageTop is the top 80% of the screen and pageBottom isthe bottom 20% */
+.pageTop {
+  width: 100%;
+  height: 75%;
+  overflow-y: scroll;
+}
+.pageBottom {
+  width: 100%;
+  height: 25%;
+  overflow-y: scroll;
 }
 
 </style>
