@@ -7,15 +7,18 @@
           <div class="panel panel-default">
             <h3 class="header-text">Input Feeds</h3>
             <div class="panel-body">
-              <button @click="selectCamera" class="btn btn-light">+ Add Camera/Video</button><br />
             </div>
             <div class="feedContainer">
             <div class="feedDisplay" v-for="feed in cameras" v-bind:class="{'selected': feed.selected}" v-bind:key="feed.id">
               <div class="feedDisplay-inner">
                <video style="width:100%" v-bind:ref="feed.id" autoplay controls :src="feed.url"></video>
-               <span>{{feed.name}} <button class="pushFeed" @click="pushFeed(feed)">+</button></span>
+               <div class="camera_header"><span class="camera_name" >{{feed.name}} <button class="pushFeed" @click="pushFeed(feed)">+</button></span>
+               </div>
               </div>
             </div>
+             <div class="addCameraOrVideo feedDisplay" @click="selectCamera">
+              <span>+ Add Video/Camera</span>
+             </div>
           </div>
 
           </div>
@@ -265,25 +268,35 @@ export default class BroadcastView extends Vue {
 
 /* feedContainer is a flexbox that stacks twocolumns of feedDisplays */
 .feedContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-   flex-wrap: wrap;
-  align-items: center;
+  display: grid;
+grid-template-columns: 1fr 1fr;
   width: 100%;
   height: 100%;
+    column-gap: 10px;
+  row-gap: 1em;
  
 }
 
 .feedDisplay {
-  display: flex;
-   padding: 10px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 50%;
-  height: 100%;
+  
+  width: 100%;
 }
+.camera_name{
+    background-color: aquamarine;
+    width: 100%;
+}
+/* addCameraOrVideo displays a grey background with rounded corners, and centered text vertical and horizontal */
+.addCameraOrVideo {
+  background-color: rgb(39, 39, 39);
+  border-radius: 5px;
+     display: flex;
+    align-items: center; /* Vertical center alignment */
+    justify-content: center; /* Horizontal center alignment */
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+ 
 /* pageTop is the top 80% of the screen and pageBottom isthe bottom 20% */
 .pageTop {
   width: 100%;
