@@ -280,11 +280,9 @@ grid-template-columns: 1fr 1fr;
 .feedDisplay {
   
   width: 100%;
+  background-color: rgb(39, 39, 39);
 }
-.camera_name{
-    background-color: aquamarine;
-    width: 100%;
-}
+
 /* addCameraOrVideo displays a grey background with rounded corners, and centered text vertical and horizontal */
 .addCameraOrVideo {
   background-color: rgb(39, 39, 39);
