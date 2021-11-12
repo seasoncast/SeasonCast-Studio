@@ -1,29 +1,35 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow, ipcMain} from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
+
+import path from 'path'
+
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
-
+ipcMain.on('signal', (event, arg) => {
+  
+  event.reply('signal-return', 'pong')
+})
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      
+      preload: path.join(__dirname, 'preload.js'),
+
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: (process.env
           .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION
-    }
-  })
+    }  })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -45,6 +51,7 @@ app.on('window-all-closed', () => {
   }
 })
 
+
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
@@ -59,6 +66,7 @@ app.on('ready', async () => {
     // Install Vue Devtools
     try {
       await installExtension(VUEJS3_DEVTOOLS)
+      console.log('Vue Devtools installed')
     } catch (e) {
       console.error('Vue Devtools failed to install:', e.toString())
     }
