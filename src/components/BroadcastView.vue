@@ -62,7 +62,8 @@
 
             <!-- Temp to show rendering on screen : source: https://www.videvo.net/video/flying-through-palm-trees-along-beach/6471/ -->
             <video loop autoplay muted src="../assets/example_video_test.mp4" style="display:none;" ref="exampleVideo"></video>
-          
+            <!-- Start broadcast button -->
+            <button class="btn btn-primary" v-on:click="startBroadcast">Start Broadcast</button>
           </ul>
         </div>
         </div>
@@ -107,7 +108,7 @@ import { Vue} from 'vue-class-component'
 import OSEG from 'oseg'
 import Swal from 'sweetalert2'
 import { Scene } from 'oseg/build/types/structs/storyline'
-
+var Peer = require('simple-peer')
 
 export default class BroadcastView extends Vue {
     scenes = [] as any[]
@@ -204,6 +205,43 @@ export default class BroadcastView extends Vue {
       }
   }
 
+async startBroadcast() {
+
+//alert user
+try {
+  const canvas = this.$refs.canvasOutput as any
+  const stream = canvas.vcaptureStream(30)
+  
+// @ts-ignore
+window.ipcRenderer.on('signal-return', () => {
+  () => {
+
+  }
+})
+// @ts-ignore
+  window.ipcRenderer.send('signal', "test")
+
+
+var peer1 = new Peer({ initiator: true, stream: stream })
+  peer1.on('signal', (data: any) => {
+    
+  // when peer1 has signaling data, give it to peer2 somehow
+  (window as any).ipcRenderer.send('signal', data)
+
+})
+
+peer1.on('connect', () => {
+  // wait for 'connect' event before using the data channel
+  peer1.send('hey peer2, how is it going?')
+})
+}catch (error){
+  await Swal.fire({
+  title: 'Are you sure?',
+  text: error+"",  
+})
+}
+
+}
   
 
     // in a Swal, we list the the cameras from getuserMediaDevices() and let them select a device
