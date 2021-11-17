@@ -3,7 +3,7 @@
 <div class="BroadcastPage">
       <!-- This is a broadcaster view. there is three columns. the first one is the sidebar -->
     <div  class="pageTop row">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
           <div class="panel panel-default">
             <h3 class="header-text">Input Feeds</h3>
             <div class="panel-body">
@@ -11,7 +11,7 @@
             <div class="feedContainer">
             <div class="feedDisplay" v-for="feed in cameras" v-bind:class="{'selected': feed.selected}" v-bind:key="feed.id">
               <div class="feedDisplay-inner">
-               <video style="width:100%" v-bind:ref="feed.id" autoplay controls :src="feed.url"></video>
+               <video style="width:100%" v-bind:ref="feed.id" autoplay controls :src="feed.url" muted ></video>
                <div class="camera_header"><span class="camera_name" >{{feed.name}} <button class="pushFeed" @click="pushFeed(feed)">+</button></span>
                </div>
               </div>
@@ -23,55 +23,27 @@
 
           </div>
         </div>
-        <div class="col-3">
+        <!-- <div class="col-3">
         <div class="sidebar-nav panel">
           <h3 class="header-text">Scenes</h3>
           <ul class="nav nav-sidebar">
             <li v-for="scene in oseg.scenes" v-bind:class="{'active': scene.id == false}" v-bind:key="scene.id">
-              <a v-on:click="selectScene(scene.id)">{{scene.name}}</a>
+              {{scene.name}}
+              components: {{scene.components.length}}
+              <a v-on:click="selectScene(scene.id)">Activate</a>
               </li>
-                   <!-- Dropdown to switch camera feed -->
-            <br style="clear:both" />
-              <span class="fa fa-camera"></span> Camera 1
-            <li class="dropdown"> &nbsp;
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-
-                <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu">
-                <li v-for="cam in cameras" v-bind:key="cam.id">
-                  <a v-on:click="selectCamera(cam.id)">{{cam.name}}</a>
-                </li>
-              </ul>
-            </li>
-            
-            <!-- Dropdown to switch graphic -->
-              <span class="fa fa-image"></span> Graphic
-
-            <li class="dropdown"> &nbsp;
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu">
-                <li v-for="graphic in graphics" v-bind:key="graphic.id">
-                  <a v-on:click="selectGraphic(graphic.id)">{{graphic.name}}</a>
-                </li>
-              </ul>
-            </li>
-          
-
-            <!-- Temp to show rendering on screen : source: https://www.videvo.net/video/flying-through-palm-trees-along-beach/6471/ -->
-            <video loop autoplay muted src="../assets/example_video_test.mp4" style="display:none;" ref="exampleVideo"></video>
-            <!-- Start broadcast button -->
-            <button class="btn btn-primary" v-on:click="startBroadcast">Start Broadcast</button>
+           
+                    
           </ul>
         </div>
-        </div>
-        <div class="col-5">
+        </div> -->
+        <div class="col-6">
           <div class="panel panel-default">
             <h3 class="header-text">Feed Output</h3>
    <canvas ref="canvasOutput" class="canvasOutput"></canvas>
           </div>
+                      <button class="btn btn-primary" v-on:click="startBroadcast">Start Broadcast</button>
+
         </div>
 
     </div>
@@ -108,13 +80,20 @@ import { Vue} from 'vue-class-component'
 import OSEG from 'oseg'
 import Swal from 'sweetalert2'
 import { Scene } from 'oseg/build/types/structs/storyline'
+import { io } from 'socket.io-client'
 var Peer = require('simple-peer')
+import axios from 'axios'
+
 
 export default class BroadcastView extends Vue {
     scenes = [] as any[]
-    cameras = [{id:'example', name: "Example", url: "https://www.w3schools.com/html/mov_bbb.mp4", type:"video" }] as {id: string, name: string, feed?: MediaStream, url?: string, type: string}[]
+    cameraScene = null as any
+    cameras = [{id:'example', name: "Example", url: require("../assets/example_video_test.mp4"), type:"video" }] as {id: string, name: string, feed?: MediaStream, url?: string, type: string}[]
     graphics = [] as any[]
     oseg = new OSEG(1920, 1080, "dev-studio")
+    peer1: any
+    socket:any
+    store = new Map() // use a map to store the data; need to find a better persistant storage solution later
 
  updated() {
   console.log("re-render")
@@ -128,7 +107,61 @@ export default class BroadcastView extends Vue {
       }
   })
  }
-  mounted () {
+
+ async login() {
+    if ( this.store.get('broadcaster_token')) {
+    const response = await axios.post('https://app.seasoncast.com/v2/broadcaster/login', {
+      token: this.store.get('broadcaster_token')
+    })
+
+    if (!response.data.success) {
+      this.store.set('broadcaster_token', null)
+    }
+    }
+
+    while (!this.store.get('broadcaster_token')) {
+    const result = await Swal.fire({
+      title: 'Broadcaster Login',
+      html: '<input type="text" id="broadcaster_email" placeholder="Email"> <input type="password" id="broadcaster_password" placeholder="Password">',
+      showCancelButton: true,
+      confirmButtonText: 'Login',
+      showLoaderOnConfirm: true,
+      preConfirm: () => {
+        return async () => {
+
+        }
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    })
+
+      if (result.value) {
+        const email =  (document.getElementById('broadcaster_email') as any).value
+        const password =  (document.getElementById('broadcaster_password') as any).value
+         const response = await axios.post('https://app.seasoncast.com/v2/broadcaster/login', {
+      email: email,
+      password: password
+    })
+
+    if (!response.data.success) {
+      this.store.set('broadcaster_token', null)
+    }else{
+      this.store.set('broadcaster_token', response.data.token)
+      this.store.set('broadcaster_key', response.data.key)
+
+    }
+      }
+    
+
+    }
+ 
+ }
+
+
+
+  async mounted () {
+
+this.login()
+
       if (this.$refs.canvasOutput) {
     console.log('BroadcastView created')
     this.oseg.setupCanvas(this.$refs.canvasOutput as HTMLCanvasElement)
@@ -136,16 +169,16 @@ export default class BroadcastView extends Vue {
       id: 'scene1',
       name: 'Scene 1',
       components: [
-        {
-          x: 0,
-          y: 0,
-          width: 100,
-          height: 100,
-          type: 3,
+        // {
+        //   x: 0,
+        //   y: 0,
+        //   width: 100,
+        //   height: 100,
+        //   type: 3,
+        //   typeName: 'feed',
+        //   video: this.$refs.exampleVideo
 
-          video: this.$refs.exampleVideo
-
-        },
+        // },
         {
           x: 0,
           y: 0,
@@ -163,6 +196,23 @@ export default class BroadcastView extends Vue {
 
           }
         },
+        // waiting for camera feed text
+        {
+          x: 10,
+          y:40,
+          width: 80,
+          height: 20,
+          type: 1,
+          text: 'Waiting for a camera feed',
+          options: {
+              fontFamily: 'Arial',
+            fontSize: 60,
+            fontWeight: 'bold',
+            fill: '#edaf05',
+
+          }
+        },
+
         {
           x: 5,
           y: 90,
@@ -203,37 +253,75 @@ export default class BroadcastView extends Vue {
       that.oseg.updateDynamicTextInScenes()
     }, 1000)
       }
+      this.peer1 = new Peer({
+                initiator: true,
+                trickle: false
+            });
+var peer = this.peer1
+ this.socket = io('ws://localhost:3000', {
+   transports: ['websocket', 'polling', 'flashsocket']
+ });
+            this.socket.on('connect', function() {
+                
+                console.log('Connected to signaling server');
+       
+            })
+                 this.socket.on('status', function(data: any) {
+                console.log(data);
+            });
+
+                this.socket.on('signal', function(data: any) {
+                    console.log('Received message:', data);
+                    peer.signal(data);
+                });
+
+                peer.on('signal', (data: any) => {
+                    console.log('Sending message:', data);
+                    this.socket.emit('signal', data);
+                });
+          
+  
+this.peer1.on('connect', () => {
+})
   }
 
-async startBroadcast() {
+async pushFeed(feed:{id: string, name: string, feed?: MediaStream, url?: string, type: string}){
+
+if (this.cameraScene) {
+  this.oseg.removeScene(this.cameraScene)
+}
+
+this.cameraScene = {
+  id: feed.id,
+  name: feed.name,
+  components: [
+    {
+      x: 0,
+      y: 0,
+      width: 100,
+      height: 100,
+      type: 3,
+      typeName: 'feed',
+      video: this.$refs[feed.id] as HTMLVideoElement
+    }
+  ]
+}
+this.oseg.importScene(this.cameraScene)
+this.oseg.addSceneToCurrent(this.cameraScene)
+
+
+}
+async startBroadcast(stream: MediaStream) {
 
 //alert user
 try {
-  const canvas = this.$refs.canvasOutput as any
-  const stream = canvas.vcaptureStream(30)
-  
-// @ts-ignore
-window.ipcRenderer.on('signal-return', () => {
-  () => {
 
-  }
-})
-// @ts-ignore
-  window.ipcRenderer.send('signal', "test")
-
-
-var peer1 = new Peer({ initiator: true, stream: stream })
-  peer1.on('signal', (data: any) => {
-    
-  // when peer1 has signaling data, give it to peer2 somehow
-  (window as any).ipcRenderer.send('signal', data)
-
+ await Swal.fire({
+  title: 'Are you re?',
+  text: "",  
 })
 
-peer1.on('connect', () => {
-  // wait for 'connect' event before using the data channel
-  peer1.send('hey peer2, how is it going?')
-})
+this.peer1.addStream(stream)
 }catch (error){
   await Swal.fire({
   title: 'Are you sure?',
@@ -258,11 +346,7 @@ peer1.on('connect', () => {
         inputOptions: cameraMap
       })
       if (userChoice.value) {
-        this.cameras.push({
-          type: "camera-local",
-          id: userChoice.value,
-          name: cameraMap[userChoice.value],
-          feed: await navigator.mediaDevices.getUserMedia({
+        var feed = await navigator.mediaDevices.getUserMedia({
           audio: true,
           video: {
             deviceId: userChoice.value,
@@ -270,7 +354,13 @@ peer1.on('connect', () => {
             height: 1080
           }
         })
+        this.cameras.push({
+          type: "camera-local",
+          id: userChoice.value,
+          name: cameraMap[userChoice.value],
+          feed: feed
         })
+
       }
     }
 
@@ -312,7 +402,7 @@ grid-template-columns: 1fr 1fr;
   height: 100%;
     column-gap: 10px;
   row-gap: 1em;
- 
+ grid-auto-rows: 1fr
 }
 
 .feedDisplay {

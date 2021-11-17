@@ -6,6 +6,11 @@ import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 import path from 'path'
+import { Worker } from 'worker_threads'
+//start worker from ./helpers/sock_server.js
+const worker = new Worker(require.resolve('./helpers/sock_server.js'))
+worker.on('message', (msg) => { console.log(msg); });
+
 
 
 // Scheme must be registered before the app is ready

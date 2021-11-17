@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 
+
 // Expose ipcRenderer to the client
 contextBridge.exposeInMainWorld('ipcRenderer', {
   send: (channel, data) => {
@@ -16,3 +17,4 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     } 
   }
 })
+
